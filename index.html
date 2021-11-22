@@ -69,25 +69,29 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button onclick="logFxn()">Console Log</button>
+      <button onclick="errFxn()">Console Error</button>
+      <button onclick="countFxn()">Console Count</button>
+      <button onclick="warnFxn()">Console Warn</button>
+      <button onclick="assertFxn()">Console Assert</button>
+      <button onclick="clearFxn()">Console Clear</button>
+      <button onclick="dirFxn()">Console Dir</button>
+      <button onclick="dirxmlFxn()">Console dirxml</button>
+      <button onclick="groupStartFxn()">Console Group Start</button>
+      <button onclick="groupEndFxn()">Console Group End</button>
+      <button onclick="tableFxn()">Console Table</button>
+      <button onclick="startFxn()">Start Timer</button>
+      <button onclick="endFxn()">End Timer</button>
+      <button onclick="traceFxn()">Console Trace</button>
+      <button onclick="globErrFxn()">Trigger a Global Error</button>
     </section>
   </main>
 
   <script>
+    window.addEventListener('error', function(event) {
+      console.log("Global error occured");
+    });
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,13 +99,94 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try {
+        if(isNaN(firstNum)){
+          throw new EvalError("Incorrect inputs");
+        }
+        if(isNaN(secondNum)){
+          throw new EvalError("Incorrect inputs");
+        }
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch(err) {
+        console.log("An error has occured");
+        console.log("Error: " + err.message);
+      } finally {
+        console.log("Error calculator finished computing.");
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+    function logFxn() {
+      console.log("Log demo");
+    }
+    function errFxn() {
+      console.error("Error demo");
+    }
+    function countFxn() {
+      console.count();
+    }
+    function warnFxn() {
+      console.warn("Warn demo");
+    }
+    function assertFxn() {
+      console.assert(3 % 2 === 0, "3 is not divisible by 2");
+    }
+    function clearFxn() {
+      console.clear();
+    }
+    function dirFxn() {
+      console.dir(document.location);
+    }
+    function dirxmlFxn() {
+      console.dirxml(document.location);
+    }
+    function groupStartFxn() {
+      console.log("Demo");
+      console.group(":3");
+    }
+    function groupEndFxn() {
+      console.groupEnd();
+      console.log(">:3c");
+    }
+    function tableFxn() {
+      console.table(["Apples", "Bananas", "Cabbage"]);
+    }
+    function startFxn() {
+      console.time("Timer");
+    }
+    function endFxn() {
+      console.timeEnd("Timer");
+    }
+    function traceFxn() {
+      first();
+    }
+    function first() {
+      second();
+    }
+    function second() {
+      third();
+    }
+    function third () {
+      console.trace();
+    }
+    function globErrFxn() {
+      var json = '{ "name": "Jon", "age": 20}';
+      try {
+        console.log("Starting try");
+        let user = JSON.parse(json);
+        if(!user.gender){
+          throw new SyntaxError("Incomplete data: no gender");
+        }
+      } catch (err) {
+        console.log("An error has occured");
+        console.log("JSON Error: " + err.message);
+      } finally {
+        console.log("Ending try");
+      }
+    }
   </script>
 </body>
 
