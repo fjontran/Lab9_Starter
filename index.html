@@ -6,7 +6,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lab 9</title>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "376258ebc2d8412f92acb566c0acb63e"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                        
   <style>
     button {
       margin: 3px;
@@ -88,6 +95,13 @@
   </main>
 
   <script>
+    class InputError extends Error {
+      constructor(message) {
+        super(message); // (1)
+        this.name = "InputError"; // (2)
+      }  
+    }
+    
     window.addEventListener('error', function(event) {
       console.log("Global error occured");
     });
@@ -101,10 +115,10 @@
       let operator = document.querySelector('#operator').value;
       try {
         if(isNaN(firstNum)){
-          throw new EvalError("Incorrect inputs");
+          throw new InputError("Incorrect inputs");
         }
         if(isNaN(secondNum)){
-          throw new EvalError("Incorrect inputs");
+          throw new InputError("Incorrect inputs");
         }
         output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
       } catch(err) {
@@ -173,21 +187,10 @@
       console.trace();
     }
     function globErrFxn() {
-      var json = '{ "name": "Jon", "age": 20}';
-      try {
-        console.log("Starting try");
-        let user = JSON.parse(json);
-        if(!user.gender){
-          throw new SyntaxError("Incomplete data: no gender");
-        }
-      } catch (err) {
-        console.log("An error has occured");
-        console.log("JSON Error: " + err.message);
-      } finally {
-        console.log("Ending try");
-      }
+      TrackJS.track('testing');
+      const number = 1;
+      number = 2;
     }
   </script>
 </body>
-
 </html>
